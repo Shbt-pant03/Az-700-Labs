@@ -1,0 +1,11 @@
+# .gitignore for SPN-Setup
+*.tfvars    
+*.tfstate
+*.tfstate.backup    
+.terraform/
+terraform.exe
+*.exe
+#Installers
+*.msi
+#VS Code settings
+.vscode/
