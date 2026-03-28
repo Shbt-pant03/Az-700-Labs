@@ -1,0 +1,5 @@
+# .gitignore for SPN-Setup
+*.tfvars    
+*.tfstate
+*.tfstate.backup    
+.terraform/
