@@ -45,3 +45,47 @@ resource "azurerm_windows_virtual_machine" "vm1" {
   }
 }
 
+# Create a Linux Virtual Machine in Subnet2 of Vnet1, also create a public IP address for VM2 and Network Interface for VM2
+resource "azurerm_public_ip" "pip_vm2" {
+  name                = "pip-vm2-lab01"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Static"
+} 
+resource "azurerm_network_interface" "nic_vm2" {
+    name                = "nic-vm2-lab01"
+    location            = azurerm_resource_group.rg.location
+    resource_group_name = azurerm_resource_group.rg.name
+
+    ip_configuration {
+        name                          = "ipconfig1"
+        subnet_id                     = azurerm_subnet.vnet1_subnet2.id
+        private_ip_address_allocation = "Dynamic"
+        public_ip_address_id = azurerm_public_ip.pip_vm2.id
+    }
+    }
+resource "azurerm_linux_virtual_machine" "vm2" {
+  name                = "vm2-lab01"
+  computer_name = "vm2lab01"
+  resource_group_name = azurerm_resource_group.rg.name  
+  location            = azurerm_resource_group.rg.location
+  size                = var.vm_linux_size
+  admin_username      = var.admin_username
+  admin_password      = var.admin_password
+  disable_password_authentication = false
+  network_interface_ids = [
+    azurerm_network_interface.nic_vm2.id,
+
+  ]
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "18.04-LTS"
+    version   = "latest"
+  }
+}

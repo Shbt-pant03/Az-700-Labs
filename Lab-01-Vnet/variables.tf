@@ -27,6 +27,10 @@ variable "vm_size" {
   default = "Standard_D2s_v3"
 }
 
+variable "vm_linux_size" {
+  default = "Standard_B2als_v2"
+}
+
 variable "admin_username" {
   default = "azureuser"
 }
