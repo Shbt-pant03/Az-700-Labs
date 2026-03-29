@@ -8,13 +8,27 @@ variable "resource_group_name" {
 }
 
 variable "location" {
-  default = "East US"
+  default = "North Central US"
 }
 
 variable "vnet1_name" {
-  default = "vnet-hub-eastus"
+  default = "vnet-hub-NCUS"
 }
 
 variable "vnet2_name" {
-  default = "vnet-spoke-eastus"
+  default = "vnet-spoke-NCUS"
 }
+
+variable "vm_name" {
+  default = "vm1-lab01"
+}
+
+variable "vm_size" {
+  default = "Standard_D2s_v3"
+}
+
+variable "admin_username" {
+  default = "azureuser"
+}
+
+variable "admin_password" {}
