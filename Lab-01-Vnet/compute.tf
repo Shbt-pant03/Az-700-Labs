@@ -1,10 +1,4 @@
-#create a public IP address for VM1
-resource "azurerm_public_ip" "pip_vm1" {
-  name                = "pip-vm-lab01"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-}
+
 #Create a Network Interface in Subnet1 of Vnet1
 resource "azurerm_network_interface" "nic_vm1" {
     name                = "nic-vm-lab01"
@@ -15,7 +9,6 @@ resource "azurerm_network_interface" "nic_vm1" {
         name                          = "ipconfig1"
         subnet_id                     = azurerm_subnet.vnet1_subnet1.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id = azurerm_public_ip.pip_vm1.id
     }
     }
 
@@ -46,12 +39,7 @@ resource "azurerm_windows_virtual_machine" "vm1" {
 }
 
 # Create a Linux Virtual Machine in Subnet2 of Vnet1, also create a public IP address for VM2 and Network Interface for VM2
-resource "azurerm_public_ip" "pip_vm2" {
-  name                = "pip-vm2-lab01"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-} 
+
 resource "azurerm_network_interface" "nic_vm2" {
     name                = "nic-vm2-lab01"
     location            = azurerm_resource_group.rg.location
@@ -61,7 +49,6 @@ resource "azurerm_network_interface" "nic_vm2" {
         name                          = "ipconfig1"
         subnet_id                     = azurerm_subnet.vnet1_subnet2.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id = azurerm_public_ip.pip_vm2.id
     }
     }
 resource "azurerm_linux_virtual_machine" "vm2" {
