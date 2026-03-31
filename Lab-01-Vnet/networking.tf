@@ -91,7 +91,54 @@ resource "azurerm_subnet_network_security_group_association" "nsg_assoc_vnet1_su
   network_security_group_id = azurerm_network_security_group.nsg_vnet1_subnet2.id
 } 
 
+# Create a Virtual Network Vnet - Spoke
+resource "azurerm_virtual_network" "vnet2" {
+  name                = var.vnet2_name
+  location            = var.location_vnet2
+  address_space       = ["10.2.0.0/16"]
+  resource_group_name = azurerm_resource_group.rg.name
+}
 
+#Create Subnet1 in Vnet2 and create NSG for Subnet1 of Vnet2 and associate NSG with Subnet1 of Vnet2
+resource "azurerm_subnet" "vnet2_subnet1" {
+  name                 = "snet-app"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet2.name
+  address_prefixes     = ["10.2.1.0/24"]
+}
 
+resource "azurerm_network_security_group" "nsg_vnet2_subnet1" {
+  name                = "nsg-vnet2-subnet1"
+  location            = var.location_vnet2
+  resource_group_name = azurerm_resource_group.rg.name
 
+  security_rule {
+    name                       = "Allow-SSH"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 
+  security_rule {
+    name                       = "Allow-http"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+}
+
+# Associate nsg-vnet2-subnet1 with snet-app of vnet2
+resource "azurerm_subnet_network_security_group_association" "nsg_assoc_vnet2_subnet1" {
+  subnet_id                 = azurerm_subnet.vnet2_subnet1.id
+  network_security_group_id = azurerm_network_security_group.nsg_vnet2_subnet1.id
+}

@@ -16,7 +16,7 @@ variable "vnet1_name" {
 }
 
 variable "vnet2_name" {
-  default = "vnet-spoke-NCUS"
+  default = "vnet-spoke-SCUS"
 }
 
 variable "vm_name" {
@@ -33,6 +33,10 @@ variable "vm_linux_size" {
 
 variable "admin_username" {
   default = "azureuser"
+}
+
+variable "location_vnet2" {
+  default = "South Central US"
 }
 
 variable "admin_password" {}
